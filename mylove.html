@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="❤️ De: tu corazón de melón ❤️">
+<meta property="og:description" content="Un mensajito con fuegos artificiales en forma de dos corazones 💖">
+<meta property="og:type" content="website">
+<meta property="og:url" content="loving-cookiepookie.netlify.app">
+<meta name="twitter:card" content="summary_large_image">
+
+<title>❤️De: Tú corazón de melón❤️</title>
+<style>
+  :root{
+    --bg1:#0b1026;
+    --bg2:#140a1e;
+    --glass: rgba(255,255,255,.10);
+    --stroke: rgba(255,255,255,.18);
+    --txt: rgba(255,255,255,.95);
+    --soft: rgba(255,255,255,.78);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; overflow:hidden; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;}
+  body{
+    background:
+      radial-gradient(1200px 800px at 20% 20%, #1a2a6c 0%, transparent 60%),
+      radial-gradient(900px 700px at 80% 30%, #b21f1f 0%, transparent 55%),
+      radial-gradient(1000px 900px at 50% 85%, #fdbb2d 0%, transparent 55%),
+      linear-gradient(120deg, var(--bg1), var(--bg2));
+    color: var(--txt);
+  }
+  canvas{ position:fixed; inset:0; width:100%; height:100%; display:block; }
+
+  .wrap{
+    position:fixed; inset:0;
+    display:grid; place-items:center;
+    padding:22px;
+    pointer-events:none;
+  }
+  .card{
+    width:min(1000px, 92vw);
+    padding:26px 22px 18px;
+    border-radius:26px;
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    backdrop-filter: blur(12px);
+    box-shadow:0 18px 60px rgba(0,0,0,.38);
+    text-align:center;
+  }
+
+  .badge{
+    display:inline-flex;
+    gap:10px;
+    align-items:center;
+    justify-content:center;
+    padding:8px 14px;
+    border-radius:999px;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.18);
+    color: var(--soft);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:.2px;
+    margin-bottom:12px;
+  }
+
+  h1{
+    margin:0 0 8px;
+    font-size: clamp(26px, 4.2vw, 50px);
+    line-height:1.05;
+    text-shadow: 0 10px 30px rgba(0,0,0,.45);
+  }
+
+  .quote{
+    margin: 8px auto 14px;
+    font-size: clamp(18px, 2.7vw, 28px);
+    font-weight:900;
+    letter-spacing:.2px;
+    background: linear-gradient(90deg, #ff4fd8, #ffde59, #7cf7ff);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .typebox{
+    margin: 12px auto 14px;
+    max-width: 72ch;
+    padding: 16px 16px;
+    border-radius: 18px;
+    background: rgba(0,0,0,.16);
+    border: 1px solid rgba(255,255,255,.14);
+    text-align:left;
+    line-height:1.75;
+    font-size: clamp(15px, 2.2vw, 18px);
+    white-space: pre-wrap;
+    position: relative;
+  }
+  .typebox .label{
+    display:block;
+    margin-bottom:10px;
+    font-size:13px;
+    color: rgba(255,255,255,.72);
+    font-weight:700;
+    letter-spacing:.3px;
+  }
+  .cursor{
+    display:inline-block;
+    width: 10px;
+    height: 1.05em;
+    margin-left: 2px;
+    transform: translateY(3px);
+    background: rgba(255,255,255,.9);
+    animation: blink 1s infinite;
+    border-radius: 3px;
+  }
+  @keyframes blink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+  .whisper{
+    margin: 6px auto 2px;
+    max-width: 80ch;
+    padding: 10px 14px;
+    border-radius: 999px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    color: rgba(255,255,255,.86);
+    font-weight: 700;
+    font-size: 13.5px;
+    letter-spacing: .15px;
+  }
+  .dot{
+    width:7px; height:7px; border-radius:999px;
+    background: rgba(255,255,255,.75);
+    box-shadow: 0 0 16px rgba(255,255,255,.22);
+    flex: 0 0 auto;
+  }
+
+  .note{
+    position:fixed;
+    left:0; top:0;
+    transform: translate(-50%, -50%);
+    padding:9px 11px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.16);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,.24);
+    color: rgba(255,255,255,.90);
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing:.2px;
+    pointer-events:none;
+    opacity:0;
+    transition: opacity .25s ease, transform .25s ease;
+    max-width:min(78vw, 320px);
+    text-align:center;
+  }
+  .note.show{ opacity:1; transform: translate(-50%, -50%) scale(1.02); }
+
+  .footer{
+    margin-top: 8px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,.68);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .note{ display:none; }
+    .cursor{ display:none; }
+  }
+</style>
+</head>
+
+<body>
+<canvas id="fx"></canvas>
+
+<div class="wrap">
+  <div class="card">
+    <div class="badge">💌 Quería decirte que...</div>
+    <h1>TE QUIERO INFINITAMENTE.🥰</h1>
+    <div class="quote">“Encontrarnos ha sido lo mejor que nos ha pasado”</div>
+
+    <div class="typebox" aria-label="mensaje romántico con efecto máquina de escribir">
+      <span class="label">✨ Con todo mi amor y ser quiero decir que...</span>
+      <span id="typed"></span><span class="cursor" aria-hidden="true"></span>
+    </div>
+
+    <div class="whisper" aria-label="frase romántica rotativa minimalista">
+      <span class="dot" aria-hidden="true"></span>
+      <span id="whisperText"> </span>
+    </div>
+
+    <div class="footer">❤️ ❤️ Hay 20 frases para tí, mi reina. ❤️ ❤️</div>
+  </div>
+</div>
+
+<div class="note" id="note"></div>
+
+<script>
+(() => {
+
+  const MENSAJE =`Gracias por estos días y por los que están por venir, por es  tos besos y por los que estamos por inventar.
+  Por cada caricia y por las que estamos por descubrir, gracias por esta vida
+  y por cada una en las que vamos a coincidir.`;
+
+  const NOTES = [
+    "Te adoro",
+    "Me encantas",
+    "Te quiero con todo mi ser",
+    "Me importas",
+    "Por ti baby, soy Batman"
+    
+  ];
+
+  const PHRASES = [
+    "1. Conocerte y estar contigo es siempre un 47/46.",
+    "2. Me encanta cómo piensas y cómo ves el mundo.",
+    "3. Admiro mucho tu fuerza y determinación.",
+    "4. Tu inteligencia me atrae más que cualquier otra cosa.",
+    "5. Contigo, hasta el silencio suena perfecto.",
+    "6. Cada día me haces sentir cosas nuevas.",
+    "7. Eres la historia más bonita que el destino escribió en mi vida.",
+    "8. No quiero caminar ni atrás ni adelante de ti, sino siempre a tu lado.",
+    "9. Tienes todo mi apoyo.",
+    "10. Confío plenamente en ti.",
+    "11. Gracias por existir en mi vida.",
+    "12. Eres mi +1 en cada vida que coincidamos.",
+    "13. No soy fotógrafo, pero cada vez que te miro, veo una obra de arte.",
+    "14. Eres el tipo de persona que hace que todo a su alrededor brille un poco más.",
+    "15. Me encantaría pasar cada minuto de mi día contigo.",
+    "16. Eres mi persona favorita en toda la existencia.",
+    "17. Tu sonrisa ilumina mi universo.",
+    "18. Eres una mujer increiblemente amable y eso me cautiva.",
+    "19. Me gusta todo de tí, desde tú sonrisa, hasta tú cabellos.",
+    "20. Mientra yo exista, te amare y adorare con toda mi alma."
+      ];
+
+  const typedEl = document.getElementById("typed");
+  const whisperEl = document.getElementById("whisperText");
+  const noteEl  = document.getElementById("note");
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function typewriter(text){
+    if(reduceMotion){
+      typedEl.textContent = text;
+      return;
+    }
+    let i = 0;
+    function tick(){
+      typedEl.textContent = text.slice(0, i);
+      i++;
+      if(i <= text.length){
+        const ch = text[i-1] || "";
+        const delay =
+          ch === "\n" ? 260 :
+          ch === ","  ? 120 :
+          ch === "."  ? 165 :
+          38;
+        setTimeout(tick, delay);
+      }
+    }
+    tick();
+  }
+
+  function showNote(text){
+    if(reduceMotion) return;
+    noteEl.textContent = text;
+    const x = (Math.random()*0.55 + 0.225) * innerWidth;
+    const y = (Math.random()*0.45 + 0.16)  * innerHeight;
+    noteEl.style.left = x + "px";
+    noteEl.style.top  = y + "px";
+    noteEl.classList.add("show");
+    clearTimeout(showNote._t1);
+    clearTimeout(showNote._t2);
+    showNote._t1 = setTimeout(() => noteEl.classList.remove("show"), 1450);
+    showNote._t2 = setTimeout(() => noteEl.textContent = "", 1700);
+  }
+
+  let phraseIdx = Math.floor(Math.random()*PHRASES.length);
+  function rotatePhrase(){
+    phraseIdx = (phraseIdx + 1) % PHRASES.length;
+    const next = PHRASES[phraseIdx];
+
+    whisperEl.style.opacity = 0;
+    setTimeout(() => {
+      whisperEl.textContent = next;
+      whisperEl.style.opacity = 1;
+    }, 220);
+  }
+  whisperEl.style.transition = "opacity .35s ease";
+  whisperEl.textContent = PHRASES[phraseIdx];
+
+  typewriter(MENSAJE);
+
+  setInterval(rotatePhrase, reduceMotion ? 6500 : 5200);
+
+  const canvas = document.getElementById("fx");
+  const ctx = canvas.getContext("2d", { alpha:true });
+  let W=0, H=0, DPR=1;
+
+  function resize(){
+    DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    W = Math.floor(innerWidth);
+    H = Math.floor(innerHeight);
+    canvas.width  = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    canvas.style.width  = W + "px";
+    canvas.style.height = H + "px";
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  addEventListener("resize", resize);
+  resize();
+
+  const rand = (a,b)=> a + Math.random()*(b-a);
+  const choice = (arr)=> arr[(Math.random()*arr.length)|0];
+
+  const stars = Array.from({length: 120}, () => ({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    r: rand(0.6, 1.8),
+    a: rand(0.25, 0.9),
+    tw: rand(0.004, 0.012)
+  }));
+  function drawStars(){
+    for(const s of stars){
+      s.a += (Math.random()-0.5)*s.tw;
+      s.a = Math.max(0.15, Math.min(0.95, s.a));
+      ctx.globalAlpha = s.a;
+      ctx.fillStyle = "#fff";
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function heartPoint(t){
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
+    return {x, y};
+  }
+
+  const particles = [];
+
+  function spawnHeartExplosion(cx, cy, opts={}){
+    const count  = opts.count ?? (reduceMotion ? 65 : 140);
+    const scale  = opts.scale ?? rand(2.3, 3.4);
+    const hueBase = opts.hueBase ?? choice([330, 345, 0, 315]);
+    const jitter = reduceMotion ? 0.30 : 0.90;
+
+    for(let i=0;i<count;i++){
+      const t = (i/count) * Math.PI*2;
+      const p = heartPoint(t);
+
+      const vx = (p.x * scale) * 0.085 + rand(-jitter, jitter);
+      const vy = (p.y * scale) * 0.085 + rand(-jitter, jitter);
+
+      particles.push({
+        x: cx + rand(-2,2),
+        y: cy + rand(-2,2),
+        vx, vy,
+        g: rand(0.006, 0.013),
+        drag: rand(0.985, 0.993),
+        life: 0,
+        max: rand(75, 115),
+        size: rand(1.2, 2.2),
+        hue: hueBase + rand(-8, 10)
+      });
+    }
+
+    if(!reduceMotion){
+      particles.push({
+        x: cx, y: cy, vx:0, vy:0,
+        g:0, drag:1,
+        life:0, max:22,
+        size: rand(16, 24),
+        hue: hueBase,
+        glow:true
+      });
+    }
+  }
+
+  function spawnDoubleHearts(){
+    const centerX = rand(W*0.30, W*0.70);
+    const centerY = rand(H*0.14, H*0.42);
+
+    const gap = rand(80, 130);
+    const leftX  = centerX - gap/2;
+    const rightX = centerX + gap/2;
+
+    const scale = rand(2.5, 3.5);
+    const hue   = choice([330, 345, 0, 315]);
+
+    spawnHeartExplosion(leftX,  centerY, { scale, hueBase: hue, count: reduceMotion ? 55 : 120 });
+    spawnHeartExplosion(rightX, centerY, { scale, hueBase: hue, count: reduceMotion ? 55 : 120 });
+
+    if(Math.random() < 0.55) showNote(choice(NOTES));
+  }
+
+  function update(){
+    ctx.fillStyle = "rgba(0,0,0,0.18)";
+    ctx.fillRect(0,0,W,H);
+    drawStars();
+
+    for(let i=particles.length-1;i>=0;i--){
+      const p = particles[i];
+      p.life++;
+      const t = p.life / p.max;
+      const alpha = Math.max(0, 1 - t);
+
+      if(p.glow){
+        ctx.globalAlpha = alpha * 0.32;
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 65%, 1)`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        ctx.fill();
+        if(p.life >= p.max) particles.splice(i,1);
+        continue;
+      }
+
+      p.vx *= p.drag;
+      p.vy *= p.drag;
+      p.vy += p.g;
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = `hsl(${p.hue}, 92%, 66%)`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+      ctx.fill();
+
+      if(!reduceMotion && p.life % 14 === 0){
+        ctx.globalAlpha = alpha * 0.18;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size*2.4, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      if(p.life >= p.max || p.y > H + 80 || p.x < -80 || p.x > W + 80){
+        particles.splice(i,1);
+      }
+    }
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(update);
+  }
+
+  function schedule(){
+    const base = reduceMotion ? 3000 : 2300;
+    const jitter = reduceMotion ? 800 : 600;
+    setTimeout(() => {
+      spawnDoubleHearts();
+      schedule();
+    }, base + Math.random()*jitter);
+  }
+
+  ctx.fillStyle = "rgba(0,0,0,1)";
+  ctx.fillRect(0,0,W,H);
+
+  setTimeout(spawnDoubleHearts, 520);
+  setTimeout(spawnDoubleHearts, 1500);
+  schedule();
+  update();
+})();
+</script>
+</body>
+</html>
+
