@@ -15,44 +15,55 @@
 
 <style>
 :root{
-  --glass: rgba(255,255,255,.10);
+  --glass: rgba(255,255,255,.06);
   --stroke: rgba(255,255,255,.18);
-  --txt: rgba(255,255,255,.95);
+  --txt: rgba(255,255,255,.96);
   --soft: rgba(255,255,255,.78);
 
-  /* Parallax (se actualiza con JS) */
+  /* Parallax */
   --px: 50%;
   --py: 50%;
+
+  /* “Latido” del fondo */
+  --bgPulse: 1;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;overflow:hidden;font-family:system-ui;-webkit-font-smoothing:antialiased}
 body{
   color: var(--txt);
-  background: #070a14; /* fallback si no carga la imagen */
+  background:#070a14;
 }
 
-/* ============ FONDO JPEG (CINEMÁTICO + PARALLAX) ============ */
-/* Fondo real */
+/* =========================
+   FONDO JPEG ULTRA (VISIBLE + “LATIDO”)
+   - 1) Usa fondo.jpg (tu archivo en Netlify)
+   - 2) Si no existe, usa foto demo bonita para ver el efecto
+========================= */
 body::before{
   content:"";
   position:fixed;
-  inset:0;
-  z-index:-2;
+  inset:-4%;
+  z-index:-3;
 
-  background-image: url("back.jpeg");
+  background-image:
+    url("back.jpeg"),
+    url("https://images.unsplash.com/photo-1529634897131-34d3c93d31b0?auto=format&fit=crop&w=2400&q=80");
   background-size: cover;
   background-repeat: no-repeat;
-
-  /* Parallax: mueve el punto de enfoque */
   background-position: var(--px) var(--py);
 
-  /* Un pelín de zoom para “cinema feel” */
-  transform: scale(1.06);
-  filter: saturate(1.05) contrast(1.05);
+  /* Zoom leve + “latido” */
+  transform: scale(calc(1.05 * var(--bgPulse)));
+  filter:
+    brightness(1.22)
+    contrast(1.08)
+    saturate(1.18);
+
+  transition: filter .6s ease;
 }
 
-/* Capa cinematográfica: oscurecer + viñeta */
+/* Overlay romántico (NO oscuro): glow + viñeta suave */
 body::after{
   content:"";
   position:fixed;
@@ -60,18 +71,24 @@ body::after{
   z-index:-2;
 
   background:
-    radial-gradient(1200px 700px at 50% 35%, rgba(255,105,180,.18), transparent 55%),
-    radial-gradient(900px 700px at 20% 20%, rgba(124,247,255,.10), transparent 60%),
-    radial-gradient(900px 800px at 80% 75%, rgba(255,222,89,.08), transparent 60%),
-    radial-gradient(1200px 900px at 50% 50%, transparent 40%, rgba(0,0,0,.55) 100%),
-    linear-gradient(rgba(0,0,0,.68), rgba(0,0,0,.68));
-  backdrop-filter: blur(2px);
+    /* glow rosita (centro) */
+    radial-gradient(900px 520px at 50% 30%, rgba(255,120,185,.20), transparent 62%),
+    /* glow azul/cyan muy leve */
+    radial-gradient(900px 700px at 18% 18%, rgba(120,245,255,.10), transparent 62%),
+    /* glow dorado leve */
+    radial-gradient(900px 800px at 82% 78%, rgba(255,235,140,.08), transparent 62%),
+
+    /* viñeta MUY suave (para que el texto resalte sin apagar la foto) */
+    radial-gradient(1200px 900px at 50% 50%, transparent 62%, rgba(0,0,0,.18) 100%),
+
+    /* velo general casi nada */
+    linear-gradient(rgba(0,0,0,.12), rgba(0,0,0,.12));
 }
 
 /* Canvas encima del fondo */
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block; z-index:-1}
 
-/* ============ UI ============ */
+/* ================= UI ================= */
 .wrap{
   position:fixed; inset:0;
   display:grid; place-items:center;
@@ -81,15 +98,19 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block; z-index:-1}
 .card{
   width:min(1000px,92vw);
   padding:26px 22px 18px;
-  border-radius:26px;
+  border-radius:28px;
   background: var(--glass);
   border: 1px solid var(--stroke);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 18px 60px rgba(0,0,0,.42);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 70px rgba(0,0,0,.30);
   text-align:center;
 }
+
 .badge{
   display:inline-flex;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
   padding:8px 14px;
   border-radius:999px;
   background:rgba(255,255,255,.12);
@@ -99,31 +120,45 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block; z-index:-1}
   font-size:13px;
   margin-bottom:12px;
 }
-h1{margin:0 0 8px;font-size:clamp(26px,4.2vw,50px); text-shadow:0 10px 30px rgba(0,0,0,.45)}
+
+h1{
+  margin:0 0 8px;
+  font-size:clamp(26px,4.2vw,50px);
+  text-shadow:0 12px 35px rgba(0,0,0,.35);
+}
+
 .quote{
   margin:8px auto 14px;
   font-size:clamp(18px,2.7vw,28px);
   font-weight:900;
-  background:linear-gradient(90deg,#9F0087,#FFD6F9,#FF30E3);
+  letter-spacing:.2px;
+  background:linear-gradient(90deg,#FF2FD6,#FFE3F7,#FFD36B);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
+  text-shadow:none;
 }
+
 .typebox{
-  margin:12px auto;
+  margin:12px auto 14px;
   max-width:72ch;
   padding:16px;
   border-radius:18px;
-  background:rgba(0,0,0,.26);
+  background:rgba(0,0,0,.12);
   border:1px solid rgba(255,255,255,.14);
   text-align:left;
   white-space:pre-wrap;
-  line-height:1.7;
+  line-height:1.75;
+  font-size: clamp(15px, 2.2vw, 18px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.18) inset;
 }
+
 .cursor{
   display:inline-block;
   width:10px;
-  height:1em;
+  height:1.05em;
+  margin-left:2px;
+  transform: translateY(3px);
   background:#fff;
   border-radius:3px;
   animation:blink 1s infinite;
@@ -132,23 +167,55 @@ h1{margin:0 0 8px;font-size:clamp(26px,4.2vw,50px); text-shadow:0 10px 30px rgba
 
 .whisper{
   margin-top:10px;
-  padding:8px 12px;
+  padding:9px 12px;
   border-radius:999px;
   background:rgba(255,255,255,.10);
   border:1px solid rgba(255,255,255,.12);
   font-size:13px;
-  color: rgba(255,255,255,.88);
+  color: rgba(255,255,255,.90);
+  display:inline-flex;
+  gap:10px;
+  align-items:center;
 }
+.whisper .dot{
+  width:7px;height:7px;border-radius:999px;
+  background:rgba(255,255,255,.9);
+  box-shadow:0 0 18px rgba(255,255,255,.22);
+}
+
+.note{
+  position:fixed;
+  left:0; top:0;
+  transform: translate(-50%, -50%);
+  padding:9px 11px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.22);
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing:.2px;
+  pointer-events:none;
+  opacity:0;
+  transition: opacity .25s ease, transform .25s ease;
+  max-width:min(78vw, 320px);
+  text-align:center;
+  z-index:5;
+}
+.note.show{ opacity:1; transform: translate(-50%, -50%) scale(1.02); }
 
 .footer{
   margin-top: 10px;
   font-size: 12.5px;
-  color: rgba(255,255,255,.68);
+  color: rgba(255,255,255,.72);
 }
 
 @media (prefers-reduced-motion: reduce){
   body::before{ transform:none; }
   .cursor{ display:none; }
+  .note{ display:none; }
 }
 </style>
 </head>
@@ -162,77 +229,117 @@ h1{margin:0 0 8px;font-size:clamp(26px,4.2vw,50px); text-shadow:0 10px 30px rgba
     <h1>TE QUIERO INFINITAMENTE 🥰</h1>
     <div class="quote">“Encontrarnos ha sido lo mejor que nos ha pasado”</div>
 
-    <div class="typebox">
+    <div class="typebox" aria-label="mensaje romántico con efecto máquina de escribir">
       <span id="typed"></span><span class="cursor" aria-hidden="true"></span>
     </div>
 
-    <div class="whisper">
+    <div class="whisper" aria-label="frase romántica rotativa minimalista">
+      <span class="dot" aria-hidden="true"></span>
       <span id="whisperText"></span>
     </div>
 
-    <div class="footer"></div>
+    <div class="footer">✨ Para ti, siempre. ✨</div>
   </div>
 </div>
 
+<div class="note" id="note"></div>
+
 <script>
 (() => {
-  // ===============================
-  // TEXTOS
-  // ===============================
   const MENSAJE =
-`Gracias por estos días y por los que están por venir, por cada beso y por los que estamos por inventar.
-Por cada caricia y por las que estamos por descubrir, gracias por esta vida y por cada una en las que vamos a coincidir.`;
+`Gracias por estos días
+y por los que están por venir,
+por estos besos
+y por los que estamos por inventar.
+por estas caricias
+y por las que estamos por descubrir,
+gracias por esta vida
+y por cada una en las que
+vamos a coincidir.`;
 
-  const PHRASES = [
-    "1. Conocerte y estar contigo es siempre un 47/46.",
-    "2. Me encanta cómo piensas y cómo ves el mundo.",
-    "3. Admiro mucho tu fuerza y determinación.",
-    "4. Tu inteligencia me atrae más que cualquier otra cosa.",
-    "5. Contigo, hasta el silencio suena perfecto.",
-    "6. Cada día me haces sentir cosas nuevas.",
-    "7. Eres la historia más bonita que el destino escribió en mi vida.",
-    "8. Eres mi persona favorita en toda la existencia.",
-    "9. Tu sonrisa ilumina mi universo."
+  const NOTES = [
+    "Te adoro",
+    "Me encantas",
+    "Te quiero con todo mi ser",
+    "Me importa todo de ti",
+    "Contigo todo es mejor",
+    "A tu lado la vida es hermosa",
+    "Gracias por existir en mi vida"
   ];
 
-  // ===============================
-  // TYPEWRITER
-  // ===============================
-  const typed = document.getElementById("typed");
-  let i = 0;
-  function type(){
-    typed.textContent = MENSAJE.slice(0, i++);
-    if(i <= MENSAJE.length){
-      const ch = MENSAJE[i-1] || "";
-      const delay = (ch === "\n") ? 220 : (ch === "," ? 110 : 38);
-      setTimeout(type, delay);
-    }
-  }
-  type();
+  const PHRASES = [
+    "Me encanta cómo piensas y cómo ves el mundo.",
+    "Admiro mucho tu fuerza y determinación.",
+    "Tu inteligencia me atrae más que cualquier otra cosa.",
+    "Contigo, hasta el silencio suena perfecto.",
+    "Cada día me haces sentir cosas nuevas.",
+    "Eres la historia más bonita que el destino escribió en mi vida.",
+    "No quiero caminar ni atrás ni adelante de ti, sino siempre a tu lado.",
+    "Tienes todo mi apoyo.",
+    "Confío plenamente en ti.",
+    "Eres mi +1 en cada vida que coincidamos.",
+    "Tu sonrisa ilumina mi universo.",
+    "Conocerte y estar contigo es siempre un 47/46."
+  ];
 
-  // Rotación minimalista (una frase a la vez)
-  const whisper = document.getElementById("whisperText");
-  let p = Math.floor(Math.random() * PHRASES.length);
-  whisper.textContent = PHRASES[p];
-  whisper.style.transition = "opacity .35s ease";
+  const typedEl = document.getElementById("typed");
+  const whisperEl = document.getElementById("whisperText");
+  const noteEl = document.getElementById("note");
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============ TYPEWRITER ============ */
+  function typewriter(text){
+    if(reduceMotion){ typedEl.textContent = text; return; }
+    let i = 0;
+    (function tick(){
+      typedEl.textContent = text.slice(0, i);
+      i++;
+      if(i <= text.length){
+        const ch = text[i-1] || "";
+        const delay =
+          ch === "\n" ? 240 :
+          ch === ","  ? 120 :
+          ch === "."  ? 165 :
+          36;
+        setTimeout(tick, delay);
+      }
+    })();
+  }
+  typewriter(MENSAJE);
+
+  /* ============ FRASES ROTATIVAS ============ */
+  let idx = Math.floor(Math.random()*PHRASES.length);
+  whisperEl.style.transition = "opacity .35s ease";
+  whisperEl.textContent = PHRASES[idx];
   setInterval(() => {
-    p = (p + 1) % PHRASES.length;
-    whisper.style.opacity = 0;
+    idx = (idx + 1) % PHRASES.length;
+    whisperEl.style.opacity = 0;
     setTimeout(() => {
-      whisper.textContent = PHRASES[p];
-      whisper.style.opacity = 1;
+      whisperEl.textContent = PHRASES[idx];
+      whisperEl.style.opacity = 1;
     }, 220);
   }, 5200);
 
-  // ===============================
-  // PARALLAX SUAVE (fondo JPEG)
-  // ===============================
-  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* ============ NOTITAS RANDOM ============ */
+  function showNote(text){
+    if(reduceMotion) return;
+    noteEl.textContent = text;
+    const x = (Math.random()*0.60 + 0.20) * innerWidth;
+    const y = (Math.random()*0.45 + 0.18) * innerHeight;
+    noteEl.style.left = x + "px";
+    noteEl.style.top  = y + "px";
+    noteEl.classList.add("show");
+    clearTimeout(showNote._t1);
+    clearTimeout(showNote._t2);
+    showNote._t1 = setTimeout(() => noteEl.classList.remove("show"), 1500);
+    showNote._t2 = setTimeout(() => noteEl.textContent = "", 1800);
+  }
+  setInterval(() => showNote(NOTES[(Math.random()*NOTES.length)|0]), reduceMotion ? 8000 : 5200);
 
+  /* ============ PARALLAX + “LATIDO” ============ */
   function setParallax(x, y){
-    // x,y en [0..1]
-    const px = (45 + x * 10).toFixed(2) + "%"; // 45%..55%
-    const py = (45 + y * 10).toFixed(2) + "%";
+    const px = (44 + x * 12).toFixed(2) + "%"; // 44..56
+    const py = (44 + y * 12).toFixed(2) + "%";
     document.documentElement.style.setProperty("--px", px);
     document.documentElement.style.setProperty("--py", py);
   }
@@ -240,99 +347,111 @@ Por cada caricia y por las que estamos por descubrir, gracias por esta vida y po
   if(!reduceMotion){
     let tx = 0.5, ty = 0.5;
     let cx = 0.5, cy = 0.5;
-
     addEventListener("mousemove", (e) => {
       tx = e.clientX / innerWidth;
       ty = e.clientY / innerHeight;
     }, {passive:true});
 
-    // Animación suave (si no mueves el mouse, sigue respirando)
     let t = 0;
-    function parallaxTick(){
-      t += 0.0035;
-      // “respira” suavemente alrededor del centro
-      const breatheX = 0.5 + Math.sin(t) * 0.015;
-      const breatheY = 0.5 + Math.cos(t*0.9) * 0.015;
+    function tick(){
+      t += 0.010;
+      const pulse = 1 + Math.sin(t) * 0.006; /* latido */
+      document.documentElement.style.setProperty("--bgPulse", pulse.toFixed(4));
 
-      // easing al target
-      cx += ((tx - cx) * 0.06);
-      cy += ((ty - cy) * 0.06);
+      cx += (tx - cx) * 0.05;
+      cy += (ty - cy) * 0.05;
 
-      const fx = cx*0.85 + breatheX*0.15;
-      const fy = cy*0.85 + breatheY*0.15;
+      /* breathe */
+      const bx = 0.5 + Math.sin(t*0.35) * 0.015;
+      const by = 0.5 + Math.cos(t*0.32) * 0.015;
 
-      setParallax(fx, fy);
-      requestAnimationFrame(parallaxTick);
+      setParallax(cx*0.82 + bx*0.18, cy*0.82 + by*0.18);
+      requestAnimationFrame(tick);
     }
-    parallaxTick();
+    tick();
   } else {
+    document.documentElement.style.setProperty("--bgPulse", "1");
     setParallax(0.5, 0.5);
   }
 
-  // ===============================
-  // CANVAS: corazones con glow
-  // ===============================
-  const c = document.getElementById("fx");
-  const ctx = c.getContext("2d", { alpha:true });
-  let W, H, DPR;
+  /* ============ CANVAS: DOBLE CORAZÓN “FUEGO ARTIFICIAL” ============ */
+  const canvas = document.getElementById("fx");
+  const ctx = canvas.getContext("2d", { alpha:true });
+  let W=0, H=0, DPR=1;
 
   function resize(){
     DPR = Math.max(1, Math.min(2, devicePixelRatio || 1));
     W = innerWidth; H = innerHeight;
-    c.width = Math.floor(W * DPR);
-    c.height = Math.floor(H * DPR);
-    c.style.width = W + "px";
-    c.style.height = H + "px";
+    canvas.width  = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    canvas.style.width  = W + "px";
+    canvas.style.height = H + "px";
     ctx.setTransform(DPR,0,0,DPR,0,0);
   }
-  resize();
   addEventListener("resize", resize, {passive:true});
+  resize();
 
   const particles = [];
   const rand = (a,b)=> a + Math.random()*(b-a);
+  const choice = (arr)=> arr[(Math.random()*arr.length)|0];
 
-  function heart(t){
-    return {
-      x: 16*Math.pow(Math.sin(t),3),
-      y: -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))
-    };
+  function heartPoint(t){
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
+    return {x, y};
   }
 
-  function spawn(){
-    const cx = Math.random()*W*0.5 + W*0.25;
-    const cy = Math.random()*H*0.30 + H*0.10;
-    const hue = rand(320, 345);
-    const scale = rand(2.6, 3.5);
+  function spawnHeartExplosion(cx, cy, opts={}){
+    const count = opts.count ?? (reduceMotion ? 80 : 170);
+    const scale = opts.scale ?? rand(2.6, 3.8);
+    const hueBase = opts.hueBase ?? choice([330, 345, 0, 315]);
+    const jitter = reduceMotion ? 0.30 : 0.90;
 
-    const count = reduceMotion ? 90 : 150;
     for(let i=0;i<count;i++){
-      const t = (i / count) * Math.PI * 2;
-      const p = heart(t);
+      const t = (i/count) * Math.PI*2;
+      const p = heartPoint(t);
       particles.push({
-        x: cx, y: cy,
-        vx: p.x * 0.08 * scale + rand(-0.6, 0.6),
-        vy: p.y * 0.08 * scale + rand(-0.6, 0.6),
+        x: cx + rand(-2,2),
+        y: cy + rand(-2,2),
+        vx: (p.x * scale) * 0.085 + rand(-jitter, jitter),
+        vy: (p.y * scale) * 0.085 + rand(-jitter, jitter),
         g: rand(0.004, 0.012),
-        drag: rand(0.986, 0.993),
+        drag: rand(0.985, 0.993),
         life: 0,
-        max: rand(80, 120),
-        r: rand(1.2, 2.4),
-        hue
+        max: rand(85, 130),
+        size: rand(1.2, 2.4),
+        hue: hueBase + rand(-10, 10)
       });
     }
 
-    // halo/flash
     if(!reduceMotion){
-      particles.push({ x:cx, y:cy, vx:0, vy:0, g:0, drag:1, life:0, max:22, halo:true, hue, r:rand(18,28) });
+      particles.push({
+        x: cx, y: cy, vx:0, vy:0, g:0, drag:1,
+        life:0, max:24, size: rand(18, 28), hue: hueBase, glow:true
+      });
     }
   }
 
+  function spawnDoubleHearts(){
+    const centerX = rand(W*0.30, W*0.70);
+    const centerY = rand(H*0.14, H*0.40);
+    const gap = rand(90, 150);
+
+    const leftX  = centerX - gap/2;
+    const rightX = centerX + gap/2;
+
+    const scale = rand(2.7, 3.9);
+    const hue   = choice([330, 345, 0, 315]);
+
+    spawnHeartExplosion(leftX,  centerY, { scale, hueBase: hue, count: reduceMotion ? 70 : 150 });
+    spawnHeartExplosion(rightX, centerY, { scale, hueBase: hue, count: reduceMotion ? 70 : 150 });
+  }
+
   function draw(){
-    // trail
-    ctx.fillStyle = "rgba(0,0,0,.16)";
+    /* trail super ligero (para que la foto se siga viendo) */
+    ctx.fillStyle = "rgba(0,0,0,0.06)";
     ctx.fillRect(0,0,W,H);
 
-    // additive glow
     ctx.save();
     ctx.globalCompositeOperation = "lighter";
 
@@ -342,11 +461,11 @@ Por cada caricia y por las que estamos por descubrir, gracias por esta vida y po
       const t = p.life / p.max;
       const a = Math.max(0, 1 - t);
 
-      if(p.halo){
-        ctx.globalAlpha = a * 0.28;
-        ctx.fillStyle = `hsla(${p.hue}, 90%, 65%, 1)`;
+      if(p.glow){
+        ctx.globalAlpha = a * 0.22;
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 68%, 1)`;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
         ctx.fill();
         if(p.life >= p.max) particles.splice(i,1);
         continue;
@@ -360,20 +479,19 @@ Por cada caricia y por las que estamos por descubrir, gracias por esta vida y po
       p.y += p.vy;
 
       ctx.globalAlpha = a;
-      ctx.fillStyle = `hsla(${p.hue}, 92%, 66%, 1)`;
+      ctx.fillStyle = `hsla(${p.hue}, 92%, 70%, 1)`;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
       ctx.fill();
 
-      // brillo extra (suave)
-      if(!reduceMotion && p.life % 14 === 0){
-        ctx.globalAlpha = a * 0.18;
+      if(!reduceMotion && p.life % 12 === 0){
+        ctx.globalAlpha = a * 0.12;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r*2.6, 0, Math.PI*2);
+        ctx.arc(p.x, p.y, p.size*2.6, 0, Math.PI*2);
         ctx.fill();
       }
 
-      if(p.life >= p.max || p.y > H + 80 || p.x < -80 || p.x > W + 80){
+      if(p.life >= p.max || p.y > H + 120 || p.x < -120 || p.x > W + 120){
         particles.splice(i,1);
       }
     }
@@ -382,12 +500,20 @@ Por cada caricia y por las que estamos por descubrir, gracias por esta vida y po
     requestAnimationFrame(draw);
   }
 
-  setInterval(spawn, reduceMotion ? 2800 : 2300);
-  spawn();
-  setTimeout(spawn, 1200);
+  function schedule(){
+    const base = reduceMotion ? 3200 : 2400;
+    const jitter = reduceMotion ? 900 : 700;
+    setTimeout(() => {
+      spawnDoubleHearts();
+      schedule();
+    }, base + Math.random()*jitter);
+  }
+
+  setTimeout(spawnDoubleHearts, 520);
+  setTimeout(spawnDoubleHearts, 1500);
+  schedule();
   draw();
 })();
 </script>
 </body>
 </html>
-
