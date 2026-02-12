@@ -8,101 +8,66 @@
 <meta property="og:description" content="Un mensajito para recordarte que todos los días son especiales 💖">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://loveucookie.netlify.app/">
-<meta property="og:image" content="https://loveucookie.netlify.app/back.jpeg">
+<meta property="og:image" content="https://loveucookie.netlify.app/preview.png">
 <meta name="twitter:card" content="summary_large_image">
 
 <title>❤️De: Tú corazón de melón❤️</title>
 
 <style>
 :root{
-  --glass: rgba(255,255,255,.06);
+  --glass: rgba(255,255,255,.08);
   --stroke: rgba(255,255,255,.18);
   --txt: rgba(255,255,255,.96);
-  --soft: rgba(255,255,255,.78);
-
-  /* Parallax */
-  --px: 50%;
-  --py: 50%;
-
-  /* “Latido” del fondo */
-  --bgPulse: 1;
+  --soft: rgba(255,255,255,.80);
 }
 
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;overflow:hidden;font-family:system-ui;-webkit-font-smoothing:antialiased}
 body{
   color: var(--txt);
-  background:#070a14;
+  background:#070a14; /* fallback */
 }
 
-/* =========================
-   FONDO JPEG ULTRA (VISIBLE + “LATIDO”)
-   - 1) Usa fondo.jpg (tu archivo en Netlify)
-   - 2) Si no existe, usa foto demo bonita para ver el efecto
-========================= */
+/* ===== SOLO IMAGEN DE FONDO (sin transiciones / sin parallax / sin overlays) ===== */
 body::before{
   content:"";
   position:fixed;
-  inset:-4%;
+  inset:0;
   z-index:-3;
 
+  /* 1) fondo.jpg (tu archivo en Netlify)
+     2) demo (solo si aún no subes fondo.jpg) */
   background-image:
     url("back.jpeg"),
     url("https://images.unsplash.com/photo-1529634897131-34d3c93d31b0?auto=format&fit=crop&w=2400&q=80");
   background-size: cover;
-  background-repeat: no-repeat;
-  background-position: var(--px) var(--py);
+  background-repeat:no-repeat;
+  background-position:center center;
 
-  /* Zoom leve + “latido” */
-  transform: scale(calc(1.05 * var(--bgPulse)));
-  filter:
-    brightness(1.22)
-    contrast(1.08)
-    saturate(1.18);
-
-  transition: filter .6s ease;
-}
-
-/* Overlay romántico (NO oscuro): glow + viñeta suave */
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  z-index:-2;
-
-  background:
-    /* glow rosita (centro) */
-    radial-gradient(900px 520px at 50% 30%, rgba(255,120,185,.20), transparent 62%),
-    /* glow azul/cyan muy leve */
-    radial-gradient(900px 700px at 18% 18%, rgba(120,245,255,.10), transparent 62%),
-    /* glow dorado leve */
-    radial-gradient(900px 800px at 82% 78%, rgba(255,235,140,.08), transparent 62%),
-
-    /* viñeta MUY suave (para que el texto resalte sin apagar la foto) */
-    radial-gradient(1200px 900px at 50% 50%, transparent 62%, rgba(0,0,0,.18) 100%),
-
-    /* velo general casi nada */
-    linear-gradient(rgba(0,0,0,.12), rgba(0,0,0,.12));
+  /* Importante: SIN animación ni transición */
+  transform:none;
+  filter:none;
 }
 
 /* Canvas encima del fondo */
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block; z-index:-1}
 
-/* ================= UI ================= */
+/* ===== UI ===== */
 .wrap{
   position:fixed; inset:0;
   display:grid; place-items:center;
   padding:22px;
   pointer-events:none;
 }
+
 .card{
-  width:min(1000px,92vw);
+  width:min(980px,92vw);
   padding:26px 22px 18px;
   border-radius:28px;
   background: var(--glass);
   border: 1px solid var(--stroke);
   backdrop-filter: blur(16px);
-  box-shadow: 0 18px 70px rgba(0,0,0,.30);
+  box-shadow: 0 18px 70px rgba(0,0,0,.28);
   text-align:center;
 }
 
@@ -136,7 +101,6 @@ h1{
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
-  text-shadow:none;
 }
 
 .typebox{
@@ -144,13 +108,12 @@ h1{
   max-width:72ch;
   padding:16px;
   border-radius:18px;
-  background:rgba(0,0,0,.12);
+  background:rgba(0,0,0,.16);
   border:1px solid rgba(255,255,255,.14);
   text-align:left;
   white-space:pre-wrap;
   line-height:1.75;
   font-size: clamp(15px, 2.2vw, 18px);
-  box-shadow: 0 12px 40px rgba(0,0,0,.18) inset;
 }
 
 .cursor{
@@ -172,7 +135,7 @@ h1{
   background:rgba(255,255,255,.10);
   border:1px solid rgba(255,255,255,.12);
   font-size:13px;
-  color: rgba(255,255,255,.90);
+  color: rgba(255,255,255,.92);
   display:inline-flex;
   gap:10px;
   align-items:center;
@@ -180,7 +143,7 @@ h1{
 .whisper .dot{
   width:7px;height:7px;border-radius:999px;
   background:rgba(255,255,255,.9);
-  box-shadow:0 0 18px rgba(255,255,255,.22);
+  box-shadow:0 0 18px rgba(255,255,255,.18);
 }
 
 .note{
@@ -192,28 +155,27 @@ h1{
   background: rgba(255,255,255,.12);
   border: 1px solid rgba(255,255,255,.16);
   backdrop-filter: blur(10px);
-  box-shadow: 0 12px 30px rgba(0,0,0,.22);
+  box-shadow: 0 12px 30px rgba(0,0,0,.20);
   color: rgba(255,255,255,.92);
   font-weight: 900;
   font-size: 13px;
   letter-spacing:.2px;
   pointer-events:none;
   opacity:0;
-  transition: opacity .25s ease, transform .25s ease;
+  transition:none; /* sin transiciones */
   max-width:min(78vw, 320px);
   text-align:center;
   z-index:5;
 }
-.note.show{ opacity:1; transform: translate(-50%, -50%) scale(1.02); }
+.note.show{ opacity:1; }
 
 .footer{
   margin-top: 10px;
   font-size: 12.5px;
-  color: rgba(255,255,255,.72);
+  color: rgba(255,255,255,.74);
 }
 
 @media (prefers-reduced-motion: reduce){
-  body::before{ transform:none; }
   .cursor{ display:none; }
   .note{ display:none; }
 }
@@ -238,7 +200,7 @@ h1{
       <span id="whisperText"></span>
     </div>
 
-    <div class="footer">✨ Para ti, siempre. ✨</div>
+    <div class="footer">✨ Amor eterno, suave y bonito. ✨</div>
   </div>
 </div>
 
@@ -247,15 +209,8 @@ h1{
 <script>
 (() => {
   const MENSAJE =
-`Gracias por estos días
-y por los que están por venir,
-por estos besos
-y por los que estamos por inventar.
-por estas caricias
-y por las que estamos por descubrir,
-gracias por esta vida
-y por cada una en las que
-vamos a coincidir.`;
+`Gracias por estos días y por los qe están por venir, por estos besos y por los que estamos por inventar.
+Por estas caricias y por las que estamos por descubrir, gracias por esta vida y por cada una en las que vamos a coincidir.`;
 
   const NOTES = [
     "Te adoro",
@@ -263,8 +218,7 @@ vamos a coincidir.`;
     "Te quiero con todo mi ser",
     "Me importa todo de ti",
     "Contigo todo es mejor",
-    "A tu lado la vida es hermosa",
-    "Gracias por existir en mi vida"
+    "A tu lado la vida es hermosa"
   ];
 
   const PHRASES = [
@@ -277,6 +231,7 @@ vamos a coincidir.`;
     "No quiero caminar ni atrás ni adelante de ti, sino siempre a tu lado.",
     "Tienes todo mi apoyo.",
     "Confío plenamente en ti.",
+    "Gracias por existir en mi vida.",
     "Eres mi +1 en cada vida que coincidamos.",
     "Tu sonrisa ilumina mi universo.",
     "Conocerte y estar contigo es siempre un 47/46."
@@ -307,20 +262,15 @@ vamos a coincidir.`;
   }
   typewriter(MENSAJE);
 
-  /* ============ FRASES ROTATIVAS ============ */
+  /* ============ FRASES ROTATIVAS (sin transición de CSS; solo cambio directo) ============ */
   let idx = Math.floor(Math.random()*PHRASES.length);
-  whisperEl.style.transition = "opacity .35s ease";
   whisperEl.textContent = PHRASES[idx];
   setInterval(() => {
     idx = (idx + 1) % PHRASES.length;
-    whisperEl.style.opacity = 0;
-    setTimeout(() => {
-      whisperEl.textContent = PHRASES[idx];
-      whisperEl.style.opacity = 1;
-    }, 220);
+    whisperEl.textContent = PHRASES[idx];
   }, 5200);
 
-  /* ============ NOTITAS RANDOM ============ */
+  /* ============ NOTITAS RANDOM (sin animación; aparece/desaparece sin transición) ============ */
   function showNote(text){
     if(reduceMotion) return;
     noteEl.textContent = text;
@@ -330,51 +280,14 @@ vamos a coincidir.`;
     noteEl.style.top  = y + "px";
     noteEl.classList.add("show");
     clearTimeout(showNote._t1);
-    clearTimeout(showNote._t2);
-    showNote._t1 = setTimeout(() => noteEl.classList.remove("show"), 1500);
-    showNote._t2 = setTimeout(() => noteEl.textContent = "", 1800);
+    showNote._t1 = setTimeout(() => {
+      noteEl.classList.remove("show");
+      noteEl.textContent = "";
+    }, 1600);
   }
-  setInterval(() => showNote(NOTES[(Math.random()*NOTES.length)|0]), reduceMotion ? 8000 : 5200);
+  setInterval(() => showNote(NOTES[(Math.random()*NOTES.length)|0]), 5600);
 
-  /* ============ PARALLAX + “LATIDO” ============ */
-  function setParallax(x, y){
-    const px = (44 + x * 12).toFixed(2) + "%"; // 44..56
-    const py = (44 + y * 12).toFixed(2) + "%";
-    document.documentElement.style.setProperty("--px", px);
-    document.documentElement.style.setProperty("--py", py);
-  }
-
-  if(!reduceMotion){
-    let tx = 0.5, ty = 0.5;
-    let cx = 0.5, cy = 0.5;
-    addEventListener("mousemove", (e) => {
-      tx = e.clientX / innerWidth;
-      ty = e.clientY / innerHeight;
-    }, {passive:true});
-
-    let t = 0;
-    function tick(){
-      t += 0.010;
-      const pulse = 1 + Math.sin(t) * 0.006; /* latido */
-      document.documentElement.style.setProperty("--bgPulse", pulse.toFixed(4));
-
-      cx += (tx - cx) * 0.05;
-      cy += (ty - cy) * 0.05;
-
-      /* breathe */
-      const bx = 0.5 + Math.sin(t*0.35) * 0.015;
-      const by = 0.5 + Math.cos(t*0.32) * 0.015;
-
-      setParallax(cx*0.82 + bx*0.18, cy*0.82 + by*0.18);
-      requestAnimationFrame(tick);
-    }
-    tick();
-  } else {
-    document.documentElement.style.setProperty("--bgPulse", "1");
-    setParallax(0.5, 0.5);
-  }
-
-  /* ============ CANVAS: DOBLE CORAZÓN “FUEGO ARTIFICIAL” ============ */
+  /* ============ CANVAS: “AMOR ETERNO” (sin destellos) ============ */
   const canvas = document.getElementById("fx");
   const ctx = canvas.getContext("2d", { alpha:true });
   let W=0, H=0, DPR=1;
@@ -391,9 +304,11 @@ vamos a coincidir.`;
   addEventListener("resize", resize, {passive:true});
   resize();
 
-  const particles = [];
   const rand = (a,b)=> a + Math.random()*(b-a);
   const choice = (arr)=> arr[(Math.random()*arr.length)|0];
+
+  // Partículas tipo “firefly” que forman corazones y luego flotan suave
+  const particles = [];
 
   function heartPoint(t){
     const x = 16 * Math.pow(Math.sin(t), 3);
@@ -401,51 +316,51 @@ vamos a coincidir.`;
     return {x, y};
   }
 
-  function spawnHeartExplosion(cx, cy, opts={}){
-    const count = opts.count ?? (reduceMotion ? 80 : 170);
-    const scale = opts.scale ?? rand(2.6, 3.8);
-    const hueBase = opts.hueBase ?? choice([330, 345, 0, 315]);
-    const jitter = reduceMotion ? 0.30 : 0.90;
+  function spawnHeart(cx, cy, opts={}){
+    const count = opts.count ?? (reduceMotion ? 70 : 120);
+    const scale = opts.scale ?? rand(2.4, 3.4);
+    const hue   = opts.hue   ?? choice([330, 345, 0, 315]);
 
     for(let i=0;i<count;i++){
       const t = (i/count) * Math.PI*2;
       const p = heartPoint(t);
+
+      // Forma el corazón y luego flota: velocidades BAJAS (sin explosión)
+      const vx = (p.x * scale) * 0.010 + rand(-0.10, 0.10);
+      const vy = (p.y * scale) * 0.010 + rand(-0.10, 0.10);
+
       particles.push({
         x: cx + rand(-2,2),
         y: cy + rand(-2,2),
-        vx: (p.x * scale) * 0.085 + rand(-jitter, jitter),
-        vy: (p.y * scale) * 0.085 + rand(-jitter, jitter),
-        g: rand(0.004, 0.012),
-        drag: rand(0.985, 0.993),
+        vx, vy,
+        // gravedad casi cero, flotación suave hacia arriba
+        g: rand(-0.0022, -0.0008),
+        drag: rand(0.992, 0.997),
         life: 0,
-        max: rand(85, 130),
-        size: rand(1.2, 2.4),
-        hue: hueBase + rand(-10, 10)
+        max: rand(240, 340),
+        size: rand(1.1, 2.1),
+        hue
       });
     }
   }
 
-  function spawnDoubleHearts(){
+  function spawnDouble(){
     const centerX = rand(W*0.30, W*0.70);
-    const centerY = rand(H*0.14, H*0.40);
+    const centerY = rand(H*0.18, H*0.46);
     const gap = rand(90, 150);
+    const hue = choice([330, 345, 0, 315]);
+    const scale = rand(2.6, 3.6);
 
-    const leftX  = centerX - gap/2;
-    const rightX = centerX + gap/2;
-
-    const scale = rand(2.7, 3.9);
-    const hue   = choice([330, 345, 0, 315]);
-
-    spawnHeartExplosion(leftX,  centerY, { scale, hueBase: hue, count: reduceMotion ? 70 : 150 });
-    spawnHeartExplosion(rightX, centerY, { scale, hueBase: hue, count: reduceMotion ? 70 : 150 });
+    spawnHeart(centerX - gap/2, centerY, { hue, scale });
+    spawnHeart(centerX + gap/2, centerY, { hue, scale });
   }
 
   function draw(){
-    /* trail super ligero (para que la foto se siga viendo) */
-    ctx.fillStyle = "rgba(0,0,0,0.06)";
+    // “trail” casi invisible para que NO parpadee y el fondo se vea
+    ctx.fillStyle = "rgba(0,0,0,0.05)";
     ctx.fillRect(0,0,W,H);
 
-    ctx.save();
+    // SIN additive/lighter => NO destello
     ctx.globalCompositeOperation = "source-over";
 
     for(let i=particles.length-1;i>=0;i--){
@@ -454,49 +369,32 @@ vamos a coincidir.`;
       const t = p.life / p.max;
       const a = Math.max(0, 1 - t);
 
-      if(p.glow){
-        ctx.globalAlpha = a * 0.22;
-        ctx.fillStyle = `hsla(${p.hue}, 90%, 68%, 1)`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-        ctx.fill();
-        if(p.life >= p.max) particles.splice(i,1);
-        continue;
-      }
-
       p.vx *= p.drag;
       p.vy *= p.drag;
       p.vy += p.g;
 
       p.x += p.vx;
       p.y += p.vy;
-      ctx.globalAlpha = a;
-      ctx.fillStyle = `hsla(${p.hue}, 92%, 70%, 1)`;
+
+      ctx.globalAlpha = a * 0.95;
+      ctx.fillStyle = `hsla(${p.hue}, 90%, 70%, 1)`;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
       ctx.fill();
 
-      if(p.life >= p.max || p.y > H + 120 || p.x < -120 || p.x > W + 120){
+      if(p.life >= p.max || p.y < -120 || p.x < -120 || p.x > W + 120){
         particles.splice(i,1);
       }
     }
 
-    ctx.restore();
+    ctx.globalAlpha = 1;
     requestAnimationFrame(draw);
   }
 
-  function schedule(){
-    const base = reduceMotion ? 3200 : 2400;
-    const jitter = reduceMotion ? 900 : 700;
-    setTimeout(() => {
-      spawnDoubleHearts();
-      schedule();
-    }, base + Math.random()*jitter);
-  }
-
-  setTimeout(spawnDoubleHearts, 520);
-  setTimeout(spawnDoubleHearts, 1500);
-  schedule();
+  // Arranque suave
+  setTimeout(spawnDouble, 600);
+  setTimeout(spawnDouble, 1900);
+  setInterval(spawnDouble, reduceMotion ? 5200 : 4400);
   draw();
 })();
 </script>
