@@ -423,13 +423,6 @@ vamos a coincidir.`;
         hue: hueBase + rand(-10, 10)
       });
     }
-
-    if(!reduceMotion){
-      particles.push({
-        x: cx, y: cy, vx:0, vy:0, g:0, drag:1,
-        life:0, max:24, size: rand(18, 28), hue: hueBase, glow:true
-      });
-    }
   }
 
   function spawnDoubleHearts(){
@@ -453,7 +446,7 @@ vamos a coincidir.`;
     ctx.fillRect(0,0,W,H);
 
     ctx.save();
-    ctx.globalCompositeOperation = "lighter";
+    ctx.globalCompositeOperation = "source-over";
 
     for(let i=particles.length-1;i>=0;i--){
       const p = particles[i];
@@ -477,19 +470,11 @@ vamos a coincidir.`;
 
       p.x += p.vx;
       p.y += p.vy;
-
       ctx.globalAlpha = a;
       ctx.fillStyle = `hsla(${p.hue}, 92%, 70%, 1)`;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
       ctx.fill();
-
-      if(!reduceMotion && p.life % 12 === 0){
-        ctx.globalAlpha = a * 0.12;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size*2.6, 0, Math.PI*2);
-        ctx.fill();
-      }
 
       if(p.life >= p.max || p.y > H + 120 || p.x < -120 || p.x > W + 120){
         particles.splice(i,1);
