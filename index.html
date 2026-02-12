@@ -28,29 +28,32 @@ body{
   background:#070a14; /* fallback */
 }
 
-/* ===== SOLO IMAGEN DE FONDO (sin transiciones / sin parallax / sin overlays) ===== */
+/* ===== SOLO IMAGEN DE FONDO (sin overlays / sin parallax / sin transiciones) ===== */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   z-index:-3;
 
-  /* 1) fondo.jpg (tu archivo en Netlify)
-     2) demo (solo si aún no subes fondo.jpg) */
   background-image:
     url("back.jpeg"),
+    /* demo (solo si aún no subes fondo.jpg) */
     url("https://images.unsplash.com/photo-1529634897131-34d3c93d31b0?auto=format&fit=crop&w=2400&q=80");
   background-size: cover;
   background-repeat:no-repeat;
   background-position:center center;
 
-  /* Importante: SIN animación ni transición */
   transform:none;
   filter:none;
 }
 
-/* Canvas encima del fondo */
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block; z-index:-1}
+/* Canvas encima del fondo (TRANSPARENTE, no oscurece nada) */
+canvas{
+  position:fixed;inset:0;width:100%;height:100%;
+  display:block;
+  z-index:-1;
+  background: transparent;
+}
 
 /* ===== UI ===== */
 .wrap{
@@ -59,7 +62,6 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block; z-index:-1}
   padding:22px;
   pointer-events:none;
 }
-
 .card{
   width:min(980px,92vw);
   padding:26px 22px 18px;
@@ -70,7 +72,6 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block; z-index:-1}
   box-shadow: 0 18px 70px rgba(0,0,0,.28);
   text-align:center;
 }
-
 .badge{
   display:inline-flex;
   gap:10px;
@@ -85,13 +86,11 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block; z-index:-1}
   font-size:13px;
   margin-bottom:12px;
 }
-
 h1{
   margin:0 0 8px;
   font-size:clamp(26px,4.2vw,50px);
   text-shadow:0 12px 35px rgba(0,0,0,.35);
 }
-
 .quote{
   margin:8px auto 14px;
   font-size:clamp(18px,2.7vw,28px);
@@ -102,20 +101,18 @@ h1{
   background-clip:text;
   color:transparent;
 }
-
 .typebox{
   margin:12px auto 14px;
   max-width:72ch;
   padding:16px;
   border-radius:18px;
-  background:rgba(0,0,0,.16);
+  background:rgba(0,0,0,.14);
   border:1px solid rgba(255,255,255,.14);
   text-align:left;
   white-space:pre-wrap;
   line-height:1.75;
   font-size: clamp(15px, 2.2vw, 18px);
 }
-
 .cursor{
   display:inline-block;
   width:10px;
@@ -191,11 +188,11 @@ h1{
     <h1>TE QUIERO INFINITAMENTE 🥰</h1>
     <div class="quote">“Encontrarnos ha sido lo mejor que nos ha pasado”</div>
 
-    <div class="typebox" aria-label="mensaje romántico con efecto máquina de escribir">
+    <div class="typebox">
       <span id="typed"></span><span class="cursor" aria-hidden="true"></span>
     </div>
 
-    <div class="whisper" aria-label="frase romántica rotativa minimalista">
+    <div class="whisper">
       <span class="dot" aria-hidden="true"></span>
       <span id="whisperText"></span>
     </div>
@@ -209,8 +206,8 @@ h1{
 <script>
 (() => {
   const MENSAJE =
-`Gracias por estos días y por los qe están por venir, por estos besos y por los que estamos por inventar.
-Por estas caricias y por las que estamos por descubrir, gracias por esta vida y por cada una en las que vamos a coincidir.`;
+`Gracias por estos días y por los que están por venir, por estos besos y por los que estamos por inventar.
+Por cada una de tus caricias y por las que estamos por descubrir, gracias por esta vida y por cada una en las que vamos a coincidir.`;
 
   const NOTES = [
     "Te adoro",
@@ -242,7 +239,7 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
   const noteEl = document.getElementById("note");
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ============ TYPEWRITER ============ */
+  // TYPEWRITER
   function typewriter(text){
     if(reduceMotion){ typedEl.textContent = text; return; }
     let i = 0;
@@ -251,18 +248,14 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
       i++;
       if(i <= text.length){
         const ch = text[i-1] || "";
-        const delay =
-          ch === "\n" ? 240 :
-          ch === ","  ? 120 :
-          ch === "."  ? 165 :
-          36;
+        const delay = ch === "\n" ? 240 : ch === "," ? 120 : ch === "." ? 165 : 36;
         setTimeout(tick, delay);
       }
     })();
   }
   typewriter(MENSAJE);
 
-  /* ============ FRASES ROTATIVAS (sin transición de CSS; solo cambio directo) ============ */
+  // Frases (sin transiciones)
   let idx = Math.floor(Math.random()*PHRASES.length);
   whisperEl.textContent = PHRASES[idx];
   setInterval(() => {
@@ -270,7 +263,7 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
     whisperEl.textContent = PHRASES[idx];
   }, 5200);
 
-  /* ============ NOTITAS RANDOM (sin animación; aparece/desaparece sin transición) ============ */
+  // Notitas (sin transiciones)
   function showNote(text){
     if(reduceMotion) return;
     noteEl.textContent = text;
@@ -287,7 +280,7 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
   }
   setInterval(() => showNote(NOTES[(Math.random()*NOTES.length)|0]), 5600);
 
-  /* ============ CANVAS: “AMOR ETERNO” (sin destellos) ============ */
+  // CANVAS (NO oscurece el fondo: nunca pintamos negro)
   const canvas = document.getElementById("fx");
   const ctx = canvas.getContext("2d", { alpha:true });
   let W=0, H=0, DPR=1;
@@ -306,8 +299,6 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
 
   const rand = (a,b)=> a + Math.random()*(b-a);
   const choice = (arr)=> arr[(Math.random()*arr.length)|0];
-
-  // Partículas tipo “firefly” que forman corazones y luego flotan suave
   const particles = [];
 
   function heartPoint(t){
@@ -317,7 +308,7 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
   }
 
   function spawnHeart(cx, cy, opts={}){
-    const count = opts.count ?? (reduceMotion ? 70 : 120);
+    const count = opts.count ?? (reduceMotion ? 60 : 110);
     const scale = opts.scale ?? rand(2.4, 3.4);
     const hue   = opts.hue   ?? choice([330, 345, 0, 315]);
 
@@ -325,7 +316,6 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
       const t = (i/count) * Math.PI*2;
       const p = heartPoint(t);
 
-      // Forma el corazón y luego flota: velocidades BAJAS (sin explosión)
       const vx = (p.x * scale) * 0.010 + rand(-0.10, 0.10);
       const vy = (p.y * scale) * 0.010 + rand(-0.10, 0.10);
 
@@ -333,12 +323,11 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
         x: cx + rand(-2,2),
         y: cy + rand(-2,2),
         vx, vy,
-        // gravedad casi cero, flotación suave hacia arriba
         g: rand(-0.0022, -0.0008),
         drag: rand(0.992, 0.997),
         life: 0,
         max: rand(240, 340),
-        size: rand(1.1, 2.1),
+        size: rand(1.1, 2.0),
         hue
       });
     }
@@ -356,11 +345,8 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
   }
 
   function draw(){
-    // “trail” casi invisible para que NO parpadee y el fondo se vea
-    ctx.fillStyle = "rgba(0,0,0,0.05)";
-    ctx.fillRect(0,0,W,H);
-
-    // SIN additive/lighter => NO destello
+    // CLAVE: limpiamos con transparencia (no negro)
+    ctx.clearRect(0,0,W,H);
     ctx.globalCompositeOperation = "source-over";
 
     for(let i=particles.length-1;i>=0;i--){
@@ -391,7 +377,6 @@ Por estas caricias y por las que estamos por descubrir, gracias por esta vida y 
     requestAnimationFrame(draw);
   }
 
-  // Arranque suave
   setTimeout(spawnDouble, 600);
   setTimeout(spawnDouble, 1900);
   setInterval(spawnDouble, reduceMotion ? 5200 : 4400);
