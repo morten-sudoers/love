@@ -15,7 +15,7 @@
 
 <style>
 :root{
-  --glass: rgba(255,255,255,.04);
+  --glass: rgba(255,255,255,.00);
   --stroke: rgba(255,255,255,.18);
   --txt: rgba(255,255,255,.96);
   --soft: rgba(255,255,255,.80);
@@ -28,7 +28,6 @@ body{
   background:#070a14; /* fallback */
 }
 
-/* ===== SOLO IMAGEN DE FONDO (sin overlays / sin parallax / sin transiciones) ===== */
 body::before{
   content:"";
   position:fixed;
@@ -37,7 +36,6 @@ body::before{
 
   background-image:
     url("back.jpeg"),
-    /* demo (solo si aún no subes fondo.jpg) */
     url("https://images.unsplash.com/photo-1529634897131-34d3c93d31b0?auto=format&fit=crop&w=2400&q=80");
   background-size: cover;
   background-repeat:no-repeat;
@@ -96,7 +94,7 @@ h1{
   font-size:clamp(18px,2.7vw,28px);
   font-weight:900;
   letter-spacing:.2px;
-  background:linear-gradient(90deg,#FF2FD6,#FFE3F7,#FFD36B);
+  background:linear-gradient(90deg,#AB16BB,#DB50EB,#600C69);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
@@ -107,7 +105,7 @@ h1{
   padding:16px;
   border-radius:18px;
   background:rgba(0,0,0,.14);
-  border:1px solid rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.08);
   text-align:left;
   white-space:pre-wrap;
   line-height:1.75;
@@ -197,7 +195,7 @@ h1{
       <span id="whisperText"></span>
     </div>
 
-    <div class="footer">✨ Amor eterno, suave y bonito. ✨</div>
+    <div class="footer">✨ Eres la estrella más hermosa del universo ✨</div>
   </div>
 </div>
 
@@ -209,29 +207,29 @@ h1{
 `Gracias por estos días y por los que están por venir, por estos besos y por los que estamos por inventar.
 Por cada una de tus caricias y por las que estamos por descubrir, gracias por esta vida y por cada una en las que vamos a coincidir.`;
 
-  const NOTES = [
-    "Te adoro",
-    "Me encantas",
-    "Te quiero con todo mi ser",
-    "Me importa todo de ti",
-    "Contigo todo es mejor",
-    "A tu lado la vida es hermosa"
-  ];
+  //const NOTES = [
+ //   "Te adoro",
+ //   "Me encantas",
+ //   "Te quiero con todo mi ser",
+ //   "Me importa todo de ti",
+ //   "Contigo todo es mejor",
+ //   "A tu lado la vida es hermosa"
+ // ];
 
   const PHRASES = [
-    "Me encanta cómo piensas y cómo ves el mundo.",
-    "Admiro mucho tu fuerza y determinación.",
-    "Tu inteligencia me atrae más que cualquier otra cosa.",
-    "Contigo, hasta el silencio suena perfecto.",
-    "Cada día me haces sentir cosas nuevas.",
-    "Eres la historia más bonita que el destino escribió en mi vida.",
-    "No quiero caminar ni atrás ni adelante de ti, sino siempre a tu lado.",
-    "Tienes todo mi apoyo.",
-    "Confío plenamente en ti.",
-    "Gracias por existir en mi vida.",
-    "Eres mi +1 en cada vida que coincidamos.",
-    "Tu sonrisa ilumina mi universo.",
-    "Conocerte y estar contigo es siempre un 47/46."
+    "1. Me encanta cómo piensas y cómo ves el mundo.",
+    "2. Admiro mucho tu fuerza y determinación.",
+    "3. Tu inteligencia me atrae más que cualquier otra cosa.",
+    "4. Contigo, hasta el silencio suena perfecto.",
+    "5. Cada día me haces sentir cosas nuevas.",
+    "6. Eres la historia más bonita que el destino escribió en mi vida.",
+    "7. No quiero caminar ni atrás ni adelante de ti, sino siempre a tu lado.",
+    "8. Tienes todo mi apoyo.",
+    "9. Confío plenamente en ti.",
+    "10. Gracias por existir en mi vida.",
+    "11. Eres mi +1 en cada vida que coincidamos.",
+    "12. Tu sonrisa ilumina mi universo.",
+    "13. Conocerte y estar contigo es siempre un 47/46."
   ];
 
   const typedEl = document.getElementById("typed");
