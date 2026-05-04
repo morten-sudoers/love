@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Para mi amada Brenda ❤️</title>
+    
+    <link href="https://googleapis.com" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.08);
+            --stroke: rgba(255, 255, 255, 0.2);
+            --txt: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--txt);
+            background: #000;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('backbirthday.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .card {
+            width: min(650px, 92vw);
+            padding: 50px 35px;
+            border-radius: 40px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--stroke);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 7px 18px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            color: #ffb7ff;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(40px, 9vw, 65px);
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffffff, #ffb7ff, #ff4d6d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .typebox {
+            min-height: 180px;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+            line-height: 1.8;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: #ff4d6d;
+            margin-left: 5px;
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background"></div>
+
+    <div class="card">
+        <div class="badge">Especialmente para ti</div>
+        <h1>¡Feliz Cumpleaños!</h1>
+        
+        <div class="typebox">
+            <span id="typed"></span><span class="cursor"></span>
+        </div>
+
+        <div class="footer">Para mi mujer amada, con todo mi amor.</div>
+    </div>
+
+    <script src="https://jsdelivr.net"></script>
+    
+    <script>
+        const MENSAJE = "Brindo por Brenda, la dueña de mis suspiros. Poseedora de la sabiduría de las antiguas crónicas y la belleza que inspira los versos de los trovadores. Que este año de vida sea un sendero de flores bajo tus pies, pues no existe en este mundo ni en el siguiente mujer más digna de ser amada. Feliz cumpleaños, amor mío.";
+        
+        const typedEl = document.getElementById("typed");
+
+        function fireworks() {
+            const duration = 6 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    colors: ['#ff4d6d', '#ffb7ff', '#ffffff']
+                }));
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    colors: ['#ff4d6d', '#ffb7ff', '#ffffff']
+                }));
+            }, 250);
+        }
+
+        function typewriter(text) {
+            let i = 0;
+            typedEl.textContent = "";
+            function tick() {
+                if (i < text.length) {
+                    typedEl.textContent += text.charAt(i);
+                    i++;
+                    let char = text.charAt(i-1);
+                    let delay = (char === '.' || char === ',') ? 500 : 55;
+                    setTimeout(tick, delay);
+                }
+            }
+            tick();
+        }
+
+        window.onload = () => {
+            // Empieza a escribir después de 1 segundo
+            setTimeout(() => { 
+                typewriter(MENSAJE); 
+            }, 1000);
+
+            // Primer ráfaga de fuegos artificiales
+            setTimeout(fireworks, 1500);
+
+            // Segunda ráfaga a mitad del mensaje para mantener la magia
+            setTimeout(fireworks, 8000);
+        };
+    </script>
+</body>
+</html>
+
