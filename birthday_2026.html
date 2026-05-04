@@ -3,186 +3,113 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Para mi amada Brenda ❤️</title>
-    
-    <link href="https://googleapis.com" rel="stylesheet">
-
+    <title>Para el amor de mi vida, Fabi ❤️</title>
     <style>
-        :root {
-            --primary: #ff4d6d;
-            --glass: rgba(255, 255, 255, 0.08);
-            --stroke: rgba(255, 255, 255, 0.2);
-            --txt: #ffffff;
-        }
-
+        /* CSS Crítico para carga instantánea */
+        :root { --p: #ff4d6d; --txt: #fff; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--txt);
-            background: #000;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        body { 
+            background: #000; 
+            color: var(--txt); 
+            font-family: serif; 
+            height: 100vh; 
+            overflow: hidden; 
+            display: grid; 
+            place-items: center; 
         }
-
-        .background {
-            position: fixed;
-            inset: 0;
-            z-index: -2;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('backbirthday.jpeg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+        .bg {
+            position: fixed; inset: 0; z-index: -2;
+            background: linear-gradient(rgba(0,0,0,0.6),#000), url('backbirthday.jpeg') center/cover no-repeat;
         }
-
+        canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
         .card {
-            width: min(650px, 92vw);
-            padding: 50px 35px;
-            border-radius: 40px;
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--stroke);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            width: min(600px, 90vw);
+            padding: 35px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
-            position: relative;
-            z-index: 10;
         }
-
-        .badge {
-            display: inline-block;
-            padding: 7px 18px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.12);
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
-            color: #ffb7ff;
-        }
-
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(40px, 9vw, 65px);
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #ffffff, #ffb7ff, #ff4d6d);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .typebox {
-            min-height: 180px;
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(1.1rem, 4vw, 1.4rem);
-            line-height: 1.8;
-            font-style: italic;
-            color: rgba(255, 255, 255, 0.95);
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1em;
-            background: #ff4d6d;
-            margin-left: 5px;
-            vertical-align: middle;
-            animation: blink 0.8s infinite;
-        }
-
-        @keyframes blink { 50% { opacity: 0; } }
-
-        .footer {
-            margin-top: 40px;
-            font-size: 0.85rem;
-            opacity: 0.6;
-            letter-spacing: 1px;
-        }
+        h1 { font-style: italic; font-size: 2.5rem; margin-bottom: 15px; color: var(--p); text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .type { font-size: 1.2rem; line-height: 1.6; font-style: italic; min-height: 120px; }
+        .cursor { display: inline-block; width: 2px; height: 1em; background: var(--p); animation: b 0.8s infinite; vertical-align: middle; }
+        @keyframes b { 50% { opacity: 0; } }
+        .f { margin-top: 25px; font-size: 0.8rem; opacity: 0.5; font-family: sans-serif; }
     </style>
 </head>
 <body>
-
-    <div class="background"></div>
-
+    <div class="bg"></div>
+    <canvas id="fw"></canvas>
     <div class="card">
-        <div class="badge">Especialmente para ti</div>
-        <h1>¡Feliz Cumpleaños!</h1>
-        
-        <div class="typebox">
-            <span id="typed"></span><span class="cursor"></span>
-        </div>
-
-        <div class="footer">Para mi mujer amada, con todo mi amor.</div>
+        <h1>¡Feliz Cumpleaños Mi Amor!</h1>
+        <div class="type"><span id="t"></span><span class="cursor"></span></div>
+        <div class="f">Con todo mi amor, tu fan enamorado</div>
     </div>
 
-    <script src="https://jsdelivr.net"></script>
-    
-    <script>
-        const MENSAJE = "Brindo por Brenda, la dueña de mis suspiros. Poseedora de la sabiduría de las antiguas crónicas y la belleza que inspira los versos de los trovadores. Que este año de vida sea un sendero de flores bajo tus pies, pues no existe en este mundo ni en el siguiente mujer más digna de ser amada. Feliz cumpleaños, amor mío.";
-        
-        const typedEl = document.getElementById("typed");
+<script>
+// Motor de Fuegos Artificiales Nativo (0KB de carga externa)
+const canvas = document.getElementById('fw');
+const ctx = canvas.getContext('2d');
+let particles = [];
 
-        function fireworks() {
-            const duration = 6 * 1000;
-            const animationEnd = Date.now() + duration;
-            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
 
-            const randomInRange = (min, max) => Math.random() * (max - min) + min;
+class Particle {
+    constructor(x, y, color) {
+        this.x = x; this.y = y; this.color = color;
+        this.v = { x: (Math.random()-0.5)*8, y: (Math.random()-0.5)*8 };
+        this.a = 1;
+    }
+    draw() {
+        ctx.globalAlpha = this.a;
+        ctx.fillStyle = this.color;
+        ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI*2); ctx.fill();
+    }
+    update() {
+        this.x += this.v.x; this.y += this.v.y; this.a -= 0.01;
+    }
+}
 
-            const interval = setInterval(function() {
-                const timeLeft = animationEnd - Date.now();
+function spawn() {
+    const x = Math.random()*canvas.width;
+    const y = Math.random()*canvas.height*0.5;
+    const colors = ['#ff4d6d', '#ffb7ff', '#ffffff', '#ff0040'];
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    for(let i=0; i<40; i++) particles.push(new Particle(x, y, color));
+}
 
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.a > 0);
+    particles.forEach(p => { p.update(); p.draw(); });
+    if(Math.random() < 0.05) spawn();
+    requestAnimationFrame(animate);
+}
 
-                const particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-                    colors: ['#ff4d6d', '#ffb7ff', '#ffffff']
-                }));
-                confetti(Object.assign({}, defaults, { 
-                    particleCount, 
-                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-                    colors: ['#ff4d6d', '#ffb7ff', '#ffffff']
-                }));
-            }, 250);
-        }
+// Escritura rápida
+const msg = "Brindo por my Little Queenie, la dueña de mis suspiros. Poseedora de la sabiduría de las antiguas crónicas y la belleza que inspira los versos de los trovadores. Que este año de vida sea un sendero de flores bajo tus pies, pues no existe en este mundo ni en el siguiente mujer más digna de ser amada. Feliz cumpleaños, amor mío.";
+let i = 0;
+function type() {
+    if(i < msg.length) {
+        document.getElementById('t').textContent += msg.charAt(i);
+        i++;
+        setTimeout(type, 30);
+    }
+}
 
-        function typewriter(text) {
-            let i = 0;
-            typedEl.textContent = "";
-            function tick() {
-                if (i < text.length) {
-                    typedEl.textContent += text.charAt(i);
-                    i++;
-                    let char = text.charAt(i-1);
-                    let delay = (char === '.' || char === ',') ? 500 : 55;
-                    setTimeout(tick, delay);
-                }
-            }
-            tick();
-        }
-
-        window.onload = () => {
-            // Empieza a escribir después de 1 segundo
-            setTimeout(() => { 
-                typewriter(MENSAJE); 
-            }, 1000);
-
-            // Primer ráfaga de fuegos artificiales
-            setTimeout(fireworks, 1500);
-
-            // Segunda ráfaga a mitad del mensaje para mantener la magia
-            setTimeout(fireworks, 8000);
-        };
-    </script>
+// Inicio inmediato
+document.addEventListener('DOMContentLoaded', () => {
+    animate();
+    type();
+});
+</script>
 </body>
 </html>
 
